@@ -1,61 +1,48 @@
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import serializers
-from .models import Alumno, Profesor, Administrador, Bodeguero
+from .models import Alumno, Profesor, Administrador, Bodeguero, Solicitud, EstadoSolicitud, Herramienta
+
+class EstadoSolicitudSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EstadoSolicitud
+        fields = '__all__'
+
+class SolicitudSerializer(serializers.ModelSerializer):
+    estado = EstadoSolicitudSerializer(source='estado_id', read_only=True)
+    profesor_nombre = serializers.CharField(source='profesor_rut', read_only=True)
+    alumno_nombre = serializers.CharField(source='alumno_rut', read_only=True)
+
+    class Meta:
+        model = Solicitud
+        fields = '__all__'
+        
+class HerramientaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Herramienta 
+        fields = '__all__'
 
 class AlumnoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Alumno
-        fields = ('email', 'contrasena')
+        fields = '__all__'
+
 
 class ProfesorSerializer(serializers.ModelSerializer):
+    rol = serializers.CharField(default='profesor')
+
     class Meta:
         model = Profesor
-        fields = ('email', 'contrasena')
+        fields = '__all__'
 
 class AdministradorSerializer(serializers.ModelSerializer):
+    rol = serializers.CharField(default='administrador')
+
     class Meta:
         model = Administrador
-        fields = ('email', 'contrasena')
+        fields = '__all__'
 
 class BodegueroSerializer(serializers.ModelSerializer):
+    rol = serializers.CharField(default='bodeguero')
+
     class Meta:
         model = Bodeguero
-        fields = ('email', 'contrasena')
-
-
-class LoginSerializer(serializers.Serializer):
-    alumnos = serializers.SerializerMethodField()
-    profesores = serializers.SerializerMethodField()
-    administradores = serializers.SerializerMethodField()
-    bodegueros = serializers.SerializerMethodField()
-
-    def get_alumnos(self, obj):
-        alumnos = Alumno.objects.all()
-        serializer = AlumnoSerializer(alumnos, many=True)
-        tokens = self.get_tokens_for_user(alumnos)
-        return {"data": serializer.data, "tokens": tokens}
-
-    def get_profesores(self, obj):
-        profesores = Profesor.objects.all()
-        serializer = ProfesorSerializer(profesores, many=True)
-        tokens = self.get_tokens_for_user(profesores)
-        return {"data": serializer.data, "tokens": tokens}
-
-    def get_administradores(self, obj):
-        administradores = Administrador.objects.all()
-        serializer = AdministradorSerializer(administradores, many=True)
-        tokens = self.get_tokens_for_user(administradores)
-        return {"data": serializer.data, "tokens": tokens}
-
-    def get_bodegueros(self, obj):
-        bodegueros = Bodeguero.objects.all()
-        serializer = BodegueroSerializer(bodegueros, many=True)
-        tokens = self.get_tokens_for_user(bodegueros)
-        return {"data": serializer.data, "tokens": tokens}
-
-    def get_tokens_for_user(self, user):
-        refresh = RefreshToken.for_user(user)
-        return {
-            "refresh": str(refresh),
-            "access": str(refresh.access_token),
-        }
+        fields = '__all__'

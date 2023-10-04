@@ -82,9 +82,9 @@ class Solicitud(models.Model):
     solicitud_id = models.IntegerField(primary_key=True)
     alumno_rut = models.ForeignKey(Alumno, on_delete=models.CASCADE)
     profesor_rut = models.ForeignKey(Profesor, on_delete=models.CASCADE)
-    fecha_solicitud = models.DateTimeField()
-    fecha_entrega = models.DateTimeField()
-    fecha_devolucion = models.DateTimeField()
+    fecha_solicitud = models.DateField()
+    fecha_entrega = models.DateField()
+    fecha_devolucion = models.DateField()
     estado_id = models.ForeignKey(EstadoSolicitud, on_delete=models.CASCADE)
 
     def __str__(self):

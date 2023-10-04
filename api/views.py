@@ -1,40 +1,35 @@
-from rest_framework.response import Response
 from rest_framework import viewsets
-from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.views import TokenObtainPairView
-from .models import Alumno, Profesor, Administrador, Bodeguero
-from .serializers import AlumnoSerializer, ProfesorSerializer, AdministradorSerializer, BodegueroSerializer, LoginSerializer
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from .models import Alumno, Bodeguero, Profesor, Administrador, Solicitud, Herramienta
+from .serializers import AlumnoSerializer, BodegueroSerializer, ProfesorSerializer, AdministradorSerializer, SolicitudSerializer, HerramientaSerializer
 
 class AlumnoView(viewsets.ModelViewSet):
     queryset = Alumno.objects.all()
     serializer_class = AlumnoSerializer
-
-class LoginView(APIView):
-    def get(self, request):
-        alumnos = Alumno.objects.all()
-        profesores = Profesor.objects.all()
-        administradores = Administrador.objects.all()
-        bodegueros = Bodeguero.objects.all()
-
-        serializer = LoginSerializer({
-            'alumnos': alumnos,
-            'profesores': profesores,
-            'administradores': administradores,
-            'bodegueros': bodegueros
-        })
-
+    
+    @action(detail=True, methods=['GET'])
+    def solicitudes(self, request, pk=None):
+        alumno = self.get_object()
+        solicitudes = Solicitud.objects.filter(alumno_rut=alumno.rut)
+        serializer = SolicitudSerializer(solicitudes, many=True)
         return Response(serializer.data)
 
-class CustomTokenObtainPairView(TokenObtainPairView):
-    serializer_class = TokenObtainPairSerializer
 
-    def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
-        refresh_token = response.data['refresh']
-        access_token = response.data['access']
+class BodegueroView(viewsets.ModelViewSet):
+    queryset = Bodeguero.objects.all()
+    serializer_class = BodegueroSerializer
+    
+class ProfesorView(viewsets.ModelViewSet):
+    queryset = Profesor.objects.all()
+    serializer_class = ProfesorSerializer
 
-        response.data['refresh'] = refresh_token
-        response.data['access'] = access_token
-        return response
+class AdministradorView(viewsets.ModelViewSet):
+    queryset = Administrador.objects.all()
+    serializer_class = AdministradorSerializer       
+
+class HerramientaView(viewsets.ModelViewSet):
+    queryset = Herramienta.objects.all()
+    serializer_class = HerramientaSerializer
     
