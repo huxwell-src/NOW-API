@@ -25,17 +25,14 @@ class AlumnoSerializer(serializers.ModelSerializer):
         model = Alumno
         fields = '__all__'
 
-
 class ProfesorSerializer(serializers.ModelSerializer):
     rol = serializers.CharField(default='profesor')
-
     class Meta:
         model = Profesor
         fields = '__all__'
 
 class AdministradorSerializer(serializers.ModelSerializer):
     rol = serializers.CharField(default='administrador')
-
     class Meta:
         model = Administrador
         fields = '__all__'

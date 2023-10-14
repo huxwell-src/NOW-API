@@ -10,6 +10,8 @@ router.register(r'Bodeguero', BodegueroView, 'Bodeguero')
 router.register(r'Administrador', AdministradorView, 'Administrador')
 router.register(r'Herramienta', HerramientaView, 'Herramienta')
 
+
+
 urlpatterns = [
     path('v1/', include(router.urls)),
 ]
