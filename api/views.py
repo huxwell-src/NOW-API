@@ -1,5 +1,4 @@
 from rest_framework import viewsets
-from rest_framework import viewsets
 from rest_framework.decorators import action
 from .models import Alumno, Bodeguero, Profesor, Administrador, Herramienta
 from .serializers import AlumnoSerializer, BodegueroSerializer, ProfesorSerializer, AdministradorSerializer, HerramientaSerializer
@@ -23,3 +22,4 @@ class AdministradorView(viewsets.ModelViewSet):
 class HerramientaView(viewsets.ModelViewSet):
     queryset = Herramienta.objects.all()
     serializer_class = HerramientaSerializer
+    
