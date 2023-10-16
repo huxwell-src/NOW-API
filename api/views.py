@@ -22,4 +22,3 @@ class AdministradorView(viewsets.ModelViewSet):
 class HerramientaView(viewsets.ModelViewSet):
     queryset = Herramienta.objects.all()
     serializer_class = HerramientaSerializer
-    
