@@ -1,6 +1,11 @@
 from rest_framework import serializers
 from .models import Alumno, Profesor, Administrador, Bodeguero, Solicitud, EstadoSolicitud, Herramienta
 
+class UsuarioSerializer(serializers.Serializer):
+    email = serializers.CharField()
+    contrasena = serializers.CharField()
+    rol = serializers.CharField()
+
 class EstadoSolicitudSerializer(serializers.ModelSerializer):
     class Meta:
         model = EstadoSolicitud
